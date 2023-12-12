@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
-import App from './App'
+import './candyCrush.css'
+import CandyCrush from './CandyCrush'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <CandyCrush />
   </React.StrictMode>,
   document.getElementById('root')
 )

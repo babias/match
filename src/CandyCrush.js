@@ -19,7 +19,7 @@ const candyColors = [
     greenCandy
 ]
 
-const App = () => {
+const CandyCrush = () => {
     const [currentColorArrangement, setCurrentColorArrangement] = useState([])
     const [squareBeingDragged, setSquareBeingDragged] = useState(null)
     const [squareBeingReplaced, setSquareBeingReplaced] = useState(null)
@@ -192,4 +192,4 @@ const App = () => {
     )
 }
 
-export default App
+export default CandyCrush
