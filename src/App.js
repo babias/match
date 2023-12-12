@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react'
 import ScoreBoard from './components/ScoreBoard'
+import { isValidMove } from './utils/isValidMove'
 import blueCandy from './images/blue-candy.png'
 import greenCandy from './images/green-candy.png'
 import orangeCandy from './images/orange-candy.png'
@@ -109,38 +110,36 @@ const App = () => {
     const dragDrop = (e) => {
         setSquareBeingReplaced(e.target)
     }
+    
+    
     const dragEnd = () => {
-        const squareBeingDraggedId = parseInt(squareBeingDragged.getAttribute('data-id'))
-        const squareBeingReplacedId = parseInt(squareBeingReplaced.getAttribute('data-id'))
-
-        currentColorArrangement[squareBeingReplacedId] = squareBeingDragged.getAttribute('src')
-        currentColorArrangement[squareBeingDraggedId] = squareBeingReplaced.getAttribute('src')
-
-        const validMoves = [
-            squareBeingDraggedId - 1,
-            squareBeingDraggedId - width,
-            squareBeingDraggedId + 1,
-            squareBeingDraggedId + width
-        ]
-
-        const validMove = validMoves.includes(squareBeingReplacedId)
-
-        const isAColumnOfFour = checkForColumnOfFour()
-        const isARowOfFour = checkForRowOfFour()
-        const isAColumnOfThree = checkForColumnOfThree()
-        const isARowOfThree = checkForRowOfThree()
-
-        if (squareBeingReplacedId &&
-            validMove &&
-            (isARowOfThree || isARowOfFour || isAColumnOfFour || isAColumnOfThree)) {
-            setSquareBeingDragged(null)
-            setSquareBeingReplaced(null)
-        } else {
-            currentColorArrangement[squareBeingReplacedId] = squareBeingReplaced.getAttribute('src')
-            currentColorArrangement[squareBeingDraggedId] = squareBeingDragged.getAttribute('src')
-            setCurrentColorArrangement([...currentColorArrangement])
-        }
-    }
+       const squareBeingDraggedId = parseInt(squareBeingDragged.getAttribute('data-id'));
+       const squareBeingReplacedId = parseInt(squareBeingReplaced.getAttribute('data-id'));
+      
+       currentColorArrangement[squareBeingReplacedId] = squareBeingDragged.getAttribute('src');
+       currentColorArrangement[squareBeingDraggedId] = squareBeingReplaced.getAttribute('src');
+      
+       const isAColumnOfFour = checkForColumnOfFour();
+       const isARowOfFour = checkForRowOfFour();
+       const isAColumnOfThree = checkForColumnOfThree();
+       const isARowOfThree = checkForRowOfThree();
+      
+       if (
+         squareBeingReplacedId &&
+         isValidMove(squareBeingDraggedId, squareBeingReplacedId, width) &&
+         (isARowOfThree || isARowOfFour || isAColumnOfFour || isAColumnOfThree)
+       ) {
+         setSquareBeingDragged(null);
+         setSquareBeingReplaced(null);
+       } else {
+          // Revert the changes if the move is not valid
+         currentColorArrangement[squareBeingReplacedId] = squareBeingReplaced.getAttribute('src');
+         currentColorArrangement[squareBeingDraggedId] = squareBeingDragged.getAttribute('src');
+         setCurrentColorArrangement([...currentColorArrangement]);
+         setSquareBeingDragged(null);
+         setSquareBeingReplaced(null);
+       }
+     };
 
 
     const createBoard = () => {
